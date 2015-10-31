@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe PhoneNumbersController, type: :controller do
+  let(:alice) { Person.create(first_name: 'Alice', last_name: 'Smith') }
 
   let(:valid_attributes) {
-    { number: "3034561290", person_id: 1 }
+    { number: "3034561290", person_id: alice.id }
   }
 
   let(:invalid_attributes) {
@@ -44,7 +45,8 @@ RSpec.describe PhoneNumbersController, type: :controller do
   end
 
   describe "POST #create" do
-    context "with valid params" do
+    describe "with valid params" do
+
       it "creates a new PhoneNumber" do
         expect {
           post :create, {:phone_number => valid_attributes}, valid_session
@@ -58,8 +60,10 @@ RSpec.describe PhoneNumbersController, type: :controller do
       end
 
       it "redirects to the created phone_number" do
+        alice = Person.create(first_name: 'Alice', last_name: 'Smith')
+        valid_attributes = {number: '4953427384', person_id: alice.id}
         post :create, {:phone_number => valid_attributes}, valid_session
-        expect(response).to redirect_to(PhoneNumber.last)
+        expect(response).to redirect_to(alice)
       end
     end
 
