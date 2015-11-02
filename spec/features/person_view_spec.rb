@@ -52,4 +52,20 @@ describe 'the person view', type: :feature do
     end
   end
 
+  describe 'email addresses' do
+    before(:each) do
+      person.email_addresses.create(address: 'jake@snake.com')
+      person.email_addresses.create(address: 'don@yourmom.com')
+      visit person_path(person)
+    end
+  end
+  it 'shows the email addresses' do
+    person.email_addresses.each do |address|
+      expect(page).to have_selector('li', text: address.address)
+    end
+  end
+  it 'has a link to add a new email' do
+    expect(page).to have_link('Add email address', href: new_email_address_path(person_id: person.id))
+  end
+
 end
